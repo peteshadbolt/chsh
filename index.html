@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CHSH</title>
+  <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+  <script src="main.js"></script>
+
+  <h1>CHSH</h1>
+  <p>
+  CHSH is a simple game for two players. We'll call them Alice and Bob.
+  </p>
+
+    <ul>
+        <li>Each player flips a coin.
+        <li>Each player then outputs one of two symbols.<br>We'll use a &#x25B2; and a &#x25CF; &ndash; but it doesn't really matter.
+    </ul>
+
+    <div id="first_demo">
+        <div class="alice">
+        Alice
+        <img src="img/alice.png"/>
+        <img src="img/flip.gif"/>
+        </div>
+
+        <div class="bob">
+        <img src="img/tails.png"/>
+        <img src="img/bob.png"/>
+        Bob
+        </div>
+    </div>
+
+    A judge then looks at Alice and Bob's output, and decides whether Alice and Bob collectively <b>win</b> or <b>lose</b> according to the following rules:
+
+    <ul>
+        <li>If either Alice or Bob flip heads (HH or HT or TH),<br/> they should output the same symbol (  &#x25B2;  &#x25B2; ) or ( &#x25CF; &#x25CF;).
+        <li>If Alice and Bob both flip tails (TT), <br/>they should output different symbols ( &#x25B2;  &#x25CF;  ) or ( &#x25CF; &#x25B2; ).
+    </ul>
+
+
+   The aim of the game is for Alice and Bob to collaborate, so as to "win" as often as possible.
+
+
+
+</body>
+</html>

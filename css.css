@@ -1,0 +1,6 @@
+body {font-family: sans-serif; padding-left: 2em; max-width:40em;}
+
+#first_demo {height:5em; margin: 1em;}
+
+.alice {float:left; color:#555;}
+.bob {float:right; color:#555;}

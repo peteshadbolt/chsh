@@ -1,8 +1,9 @@
-body {font-family: sans-serif; padding-left: 2em; max-width:40em; text-align:justify;}
+body {font-family: sans-serif; padding-left: 2em; text-align:justify;}
+#content { max-width:600px; min-width:600px; margin:auto; padding-top:1em;}
 
-#first_demo {height:5em; margin: 2em 0em;}
+.demo {height:5em; margin: 2em 0em; text-align:center;}
+.demo div {display:inline-block}
 
-.alice {float:left; color:#555;}
-.bob {float:right; color:#555;}
+iframe {overflow:hidden;border: 0px solid #ffffff;}
 
 li { margin:.5em}

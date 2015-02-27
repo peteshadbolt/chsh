@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <script src="main.js"></script>
+  <div id=content>
 
   <h1>CHSH</h1>
   <p>
@@ -20,20 +20,14 @@
         <li>Each player then chooses to output one of two symbols.<br>We'll use &#x25B2; and &#x25CF;, but they could be any two symbols.
     </ul>
 
-    <div id="first_demo">
-        <div class="alice">
-            <img src="img/alice.png"/>
-            <center>Alice</center>
-        </div>
+    <iframe src="first_demo.html" width=601 height=101 scrolling="no" ></iframe>
 
-        <img src="img/flip.gif"/>
+    <!--<div id="someid">-->
+        <!--<canvas id=first_demo width=600 height=100></canvas>-->
+    <!--</div>-->
+    <!--<script src="main.js"></script>-->
 
 
-        <div class="bob">
-            <img src="img/bob.png"/>
-            <center>Bob</center>
-        </div>
-    </div>
 
     A judge looks at Alice and Bob's output, and decides whether they collectively <b>win</b> or <b>lose</b> according to the following rules:
 
@@ -43,25 +37,25 @@
     </ul>
 
 
-   The aim of the game is for Alice and Bob to collaborate, so as to "win" as often as possible.
-
-    <div id="first_demo">
-        <div class="alice">
-            <img src="img/alice.png"/>
-            <center>Alice</center>
-        </div>
-
-        <img src="img/flip.gif"/>
+   The aim of the game is for Alice and Bob to collaborate, so as to win as often as possible.
 
 
-        <div class="bob">
-            <img src="img/bob.png"/>
-            <center>Bob</center>
-        </div>
-    </div>
+    <!--<div id="first_demo">-->
+        <!--<div class="alice">-->
+            <!--<img src="img/alice.png"/>-->
+            <!--<center>Alice</center>-->
+        <!--</div>-->
+
+        <!--<img src="img/flip.gif"/>-->
 
 
+        <!--<div class="bob">-->
+            <!--<img src="img/bob.png"/>-->
+            <!--<center>Bob</center>-->
+        <!--</div>-->
+    <!--</div>-->
 
+</div>
 
 </body>
 </html>

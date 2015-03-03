@@ -1,0 +1,15 @@
+body {font-family: Helvetica, "Nimbus Sans L", "Liberation Sans", Arial, sans-serif; text-align:justify;}
+#content { max-width:600px; min-width:600px; margin:auto; padding-top:1em;}
+
+.demo {height:5em; margin: 2em 0em; text-align:center;}
+.demo div {display:inline-block}
+
+iframe {overflow:hidden;border: 0px solid #ffffff; padding: 1em 0em}
+
+.caption {color:gray; font-size:10pt; text-align: center;}
+
+
+li { margin:.5em}
+
+canvas:hover {cursor:pointer;}
+#winlose {text-align:center;}

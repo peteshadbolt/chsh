@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8">
 <title>First demo</title>
+<style>
+canvas:hover {cursor:pointer;}
+</style>
 </head>
 
 <body>
@@ -11,22 +14,10 @@
 <script src="main.js"></script>
 
 <script type="text/javascript">
-    var alice, bob, aliceCoin, bobCoin;
 
-    function update(){
-        ctx.clearRect(0,0,gc.width,gc.height);
-        alice.draw(ctx);
-        bob.draw(ctx);
-        aliceCoin.move();
-        bobCoin.move();
-        aliceCoin.draw(ctx);
-        bobCoin.draw(ctx);
-    }
 
     window.onload = function(){
-        gc=document.getElementById('first_demo');
-        ctx = gc.getContext('2d');
-        loadImages();
+        boot();
 
         alice = new Person(images.alice, 0, 0, 1);
         bob = new Person(images.bob, gc.width, 0, -1);
@@ -35,23 +26,27 @@
 
         aliceCoin.onLand = function(){
             choice = Math.random()>0.5 ? "circle" : "triangle";
-            setTimeout(function(){alice.say("circle");}, 500);
-            setTimeout(function(){aliceCoin.flip();}, 2500);
+            setTimeout(function(){alice.say("circle");}, 250);
         }
 
         bobCoin.onLand = function(){
             choice = Math.random()>0.5 ? "circle" : "triangle";
-            setTimeout(function(){bob.say(choice);}, 500);
-            setTimeout(function(){bobCoin.flip();}, 2500);
+            setTimeout(function(){bob.say(choice);}, 250);
         }
 
-        aliceCoin.flip();
-        bobCoin.flip();
-        setInterval(function(){requestAnimationFrame(update);}, 33);
+        gc.onclick = function(){
+            alice.say(undefined);
+            bob.say(undefined);
+            aliceCoin.flip();
+            bobCoin.flip();
+        }
+
+        setInterval(update, 15);
     }
+
 </script>
 
-<canvas id=first_demo width=600 height=100></canvas>
+<canvas id=canvas width=600 height=100></canvas>
 
 </body>
 </html>

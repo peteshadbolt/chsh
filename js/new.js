@@ -77,20 +77,20 @@ function WavePlate(id, x, y, angles){
     self.image = addImg(id, "img/waveplate.png", x, y);
     self.angle = 0;
     self.angles = angles
-    self.image.hide();
+    //self.image.hide();
 
     self.setAngle=function(whichAngle){
-        self.target_angle = self.angles[whichAngle];
+        self.target_angle = self.angles[whichAngle]*2;
         self.moveInterval = setInterval(self.move, 15);
     }
 
     self.reset=function(){
-        self.image.fadeOut(100);
+        //self.image.fadeOut(100);
     }
 
     self.move = function(){
-        self.image.fadeIn(100);
-        self.angle += (self.target_angle-self.angle)*0.3;
+        //self.image.fadeIn(100);
+        self.angle += (self.target_angle-self.angle)*0.4;
         self.image.css({"transform": "rotate("+self.angle+"deg)"}); 
         if (Math.abs(self.angle-self.target_angle)<0.1){
             clearInterval(self.moveInterval);
@@ -104,20 +104,21 @@ function Detector(name, x, y){
     $("#content").append("<div id='"+name+"'></div>");
     self.container = $("#"+name);
     self.blackbox = addImg(name+"_blackbox", "img/blackbox.png", 0, 0, self.container);
-    self.flags = [addImg(name+"_circle", "img/flagcircle.png", 10, -30, self.container),
-                addImg(name+"_triangle", "img/flagtriangle.png", 10, -30, self.container)];
+    self.flags = {"circle":addImg(name+"_circle", "img/flagguilty.png", 10, -30, self.container),
+                "triangle":addImg(name+"_triangle", "img/flaginnocent.png", 10, -30, self.container)};
     self.container.css({"position":"absolute", "left":x+"px", "top":y+"px"});
-    self.flags[0].hide();
-    self.flags[1].hide();
+    self.flags.circle.hide();
+    self.flags.triangle.hide();
 
     self.flagUp=function(whichflag){
-        self.flags[0].fadeIn(200);
+        self.flag = whichflag;
+        self.flags[whichflag].fadeIn(200);
         if (self.afterFlag){setTimeout(self.afterFlag, 500);}
     }
 
     self.reset = function(){
-        self.flags[0].fadeOut(200);
-        self.flags[1].fadeOut(200);
+        self.flags.circle.fadeOut(200);
+        self.flags.triangle.fadeOut(200);
     }
 }
 
@@ -126,15 +127,24 @@ function Person(name, img, x, y, direction){
     self.image = addImg(name, img, x, y);
     fliph(self.image, direction);
 
-    self.sayings = [addImg(name+"_say1", "img/say_circle.png", x+70*direction, y-10),
-                    addImg(name+"_say2", "img/say_triangle.png", x+70*direction, y-10)];
-    fliph(self.sayings[0], direction);
-    fliph(self.sayings[1], direction);
-    self.sayings[0].hide();
-    self.sayings[1].hide();
+    var which_guilty = direction > 0 ? "img/say_guilty.png" : "img/say_guilty2.png";
+    self.sayings = {"circle":addImg(name+"_say1", which_guilty, x+70*direction, y-10),
+                    "triangle":addImg(name+"_say2", "img/say_innocent.png", x+70*direction, y-10)};
+    fliph(self.sayings.circle, direction);
+    fliph(self.sayings.triangle, direction);
+    self.sayings.circle.hide();
+    self.sayings.triangle.hide();
 
-    self.say = function(saywhat){
-        self.sayings[saywhat].fadeIn(200).delay(2000).fadeOut();
+    self.reset = function(){
+        self.sayings.circle.hide().clearQueue();
+        self.sayings.triangle.hide().clearQueue();
+    }
+
+    self.say = function(saywhat, timeout){
+        if (timeout==undefined){timeout=true;}
+        self.sayings[saywhat].fadeIn(200).delay(2000);
+        if (timeout){self.sayings[saywhat].fadeOut(200);}
+        if(self.afterSay){self.afterSay();}
     }
 }
 
@@ -178,5 +188,84 @@ function Coin(name, x, y){
         self.container.css({"top":self.y+"px"});
         self.container.css({"transform": "scaleY("+sy+")"});
     }
+}
 
+function Rules(x, y, width, height, text){
+    var self=this;
+    self.text = text==undefined ? true : false;
+
+    $("#content").append("<canvas width="+width+" height="+height+" id=canvas ></canvas>");
+    self.canvas = $("#canvas");
+    self.width=width;
+    self.height=height;
+    x2 = x - self.width/2;
+    y2 = y - self.height/2;
+    self.canvas.css({"position":"absolute", "left":x2+"px", "top":y2+"px"});
+    self.ctx = self.canvas[0].getContext("2d");
+
+    self.prepare = function(){
+        var ctx=self.ctx;
+        ctx.lineCap="round";
+        ctx.lineJoin="round";
+        ctx.textBaseline = 'middle'; 
+        ctx.textAlign = 'center'; 
+        ctx.font=15+'px sans';
+    }
+
+    self.edge = function(a, b){
+        var ctx=self.ctx;
+        if (a == "tails" && b=="tails"){ ctx.setLineDash([8]) };
+
+        ctx.strokeStyle = "gray";
+        ctx.fillStyle = "gray"; 
+        ctx.lineWidth=2;
+        if (alice_coin.outcome==a && bob_coin.outcome==b){
+            ctx.strokeStyle = "red";
+            ctx.fillStyle = "red"; 
+            ctx.lineWidth=3;
+        }
+
+        ctx.beginPath();
+        var w = .8*self.width/2; var h = .7*self.height/2;
+        var gety = {"heads":-h, "tails":h}
+        ctx.moveTo(-w, gety[a]); ctx.lineTo(w, gety[b]);
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(0, (gety[a]+gety[b])/2);
+        ctx.rotate(Math.atan2((gety[b]-gety[a])/2., w));
+        direction = (gety[a]-gety[b])/2;
+        var text = (a=="tails" && b=="tails") ? "disagree" : "agree";
+        if (self.text){ctx.fillText(text, direction, 15);}
+        ctx.restore();
+    }
+
+    self.draw = function(){
+        var ctx = self.ctx;
+        ctx.save();
+        ctx.clearRect(0, 0, self.width, self.height);
+        ctx.translate(self.width/2, self.height/2-10);
+        self.prepare();
+
+        var w = .8*self.width/2; var h = .7*self.height/2;
+        var gety = {"heads":-h, "tails":h}
+        self.edge("heads", "heads");
+        self.edge("heads", "tails");
+        self.edge("tails", "heads");
+        self.edge("tails", "tails");
+
+        if (self.text){
+        ctx.fillStyle = alice_coin.outcome=="heads" ? "red" : "gray"; 
+        ctx.fillText("H", -w-20, -h);
+        ctx.fillStyle = bob_coin.outcome=="heads" ? "red" : "gray"; 
+        ctx.fillText("H", +w+20, -h);
+        ctx.fillStyle = alice_coin.outcome=="tails" ? "red" : "gray"; 
+        ctx.fillText("T", -w-20, h);
+        ctx.fillStyle = bob_coin.outcome=="tails" ? "red" : "gray"; 
+        ctx.fillText("T", +w+20, h);
+        }
+        ctx.restore();
+    }
+
+    self.draw();
 }

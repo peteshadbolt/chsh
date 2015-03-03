@@ -4,49 +4,48 @@
 <head>
 <meta charset="utf-8">
 <title>First demo</title>
-<style>
-canvas:hover {cursor:pointer;}
-</style>
+<link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
 
-<script src="main.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/new.js"></script>
 
 <script type="text/javascript">
 
+window.onload = function(){
 
-    window.onload = function(){
-        boot();
+    alice = new Person("alice", "img/alice.png", 100, 50, 1);
+    bob = new Person("bob", "img/bob.png", 500, 50, -1);
+    alice_coin = new Coin("alice_coin", 200, 80);
+    bob_coin = new Coin("bob_coin", 400, 80);
 
-        alice = new Person(images.alice, 0, 0, 1);
-        bob = new Person(images.bob, gc.width, 0, -1);
-        aliceCoin = new Coin(100);
-        bobCoin = new Coin(450);
+    $("#content").click(function(){
+        if (locked){return;}
+        locked=true;
+        alice.reset();
+        bob.reset();
+        alice_coin.flip();
+        bob_coin.flip();
+    });
 
-        aliceCoin.onLand = function(){
-            choice = Math.random()>0.5 ? "circle" : "triangle";
-            setTimeout(function(){alice.say("circle");}, 250);
-        }
-
-        bobCoin.onLand = function(){
-            choice = Math.random()>0.5 ? "circle" : "triangle";
-            setTimeout(function(){bob.say(choice);}, 250);
-        }
-
-        gc.onclick = function(){
-            alice.say(undefined);
-            bob.say(undefined);
-            aliceCoin.flip();
-            bobCoin.flip();
-        }
-
-        setInterval(update, 15);
+    alice_coin.onLand = function(){
+        var choice = Math.random()>0.5 ? "circle" : "triangle";
+        setTimeout(function(){alice.say(choice, false);}, 250);
     }
+
+    bob_coin.onLand = function(){
+        var choice = Math.random()>0.5 ? "circle" : "triangle";
+        setTimeout(function(){bob.say(choice, false);}, 250);
+    }
+
+    alice.afterSay = function(){locked=false;}
+}
 
 </script>
 
-<canvas id=canvas width=600 height=100></canvas>
+<div id="content" style="width:600px; height:100px;"> </div>
 
 </body>
 </html>

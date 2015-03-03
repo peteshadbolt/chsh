@@ -25,12 +25,12 @@ function myUpdate(){
     }
 
     if (time>30){time=undefined;}
-
     if (time!=undefined){time += 1;}
 }
 
 window.onload = function(){
     boot();
+
 
     $("#laser").click(function(){
         if (time==undefined){time=0;}

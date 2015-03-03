@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Third demo</title>
+<link rel="stylesheet" href="css/css.css">
+</head>
+
+<body>
+
+<script src="js/jquery.js"></script>
+<script src="js/new.js"></script>
+
+<script type="text/javascript">
+var wins = 0;
+var losses = 0;
+var autoplayer;
+
+function bellstate(alice_flip, bob_flip){
+    var p_same = Math.pow(Math.cos(Math.PI/8),2)
+    var p_different = 1 - p_same;
+    if (alice_flip=="tails" && bob_flip=="tails"){
+        // Swap the probabilities
+        var temp = p_same, p_same = p_different, p_different=temp;
+    }
+    var r = Math.random();
+    var opposite = {"circle":"triangle", "triangle":"circle"};
+    var alice_output = Math.random() < 0.5 ? "circle" : "triangle";
+    var bob_output = Math.random() < p_same ? alice_output : opposite[alice_output];
+    return {"alice":alice_output, "bob":bob_output}
+}
+
+function executeStrategy(){
+    alice.say(alice_detector.flag);
+    bob.say(bob_detector.flag);
+
+
+    if (alice_coin.outcome=="tails" && bob_coin.outcome=="tails"){
+        if (alice_detector.flag==bob_detector.flag){
+            losses += 1;
+        } else {
+            wins += 1;
+        }
+    } else {
+        if (alice_detector.flag==bob_detector.flag){
+            wins += 1;
+        } else {
+            losses += 1;
+        }
+    }
+
+    var percent = (100*wins/(wins+losses)).toFixed(0);
+    $("#winlose").html("Won " + wins + " games  / Lost " + losses + " games ("+ percent + "%)");
+
+    locked=false;
+}
+
+function haveTurn(){
+    alice_waveplate.reset(); 
+    bob_waveplate.reset();
+    alice_detector.reset(); 
+    bob_detector.reset();
+    laser.fire(); 
+}
+
+function autoplay(){
+    haveTurn();
+    clearInterval(autoplayer);
+    autoplayer = setInterval(haveTurn, 4000);
+}
+
+
+window.onload = function(){
+    var laser_x = 50;
+    var crystal_x = 172;
+    var coin_x = 300;
+    var waveplate_x = 370;
+    var detector_x = 430;
+    var person_x = 550;
+
+    person_y = 70;
+    midpoint = $("#content").height()/2;
+    alice_beamline = midpoint-person_y;
+    bob_beamline = midpoint+person_y;
+
+    crystal = new Crystal(crystal_x, midpoint);
+    laser = new Laser(laser_x, midpoint);
+
+    alice_detector = new Detector("alice_detector", detector_x, alice_beamline);
+    bob_detector = new Detector("bob_detector", detector_x, bob_beamline);
+
+    alice = new Person("alice", "img/alice.png", person_x, alice_beamline, -1);
+    bob = new Person("bob", "img/bob.png", person_x, bob_beamline, -1);
+
+    alice_photon = new Photon("alice_photon", crystal_x, midpoint, 1);
+    bob_photon = new Photon("bob_photon", crystal_x, midpoint, -1);
+
+    alice_coin = new Coin("alice_coin", coin_x, alice_beamline+30);
+    bob_coin = new Coin("bob_coin", coin_x, bob_beamline+30);
+
+    alice_waveplate = new WavePlate("alice_waveplate", waveplate_x, alice_beamline, [0, 45]);
+    bob_waveplate = new WavePlate("bob_waveplate", waveplate_x, bob_beamline, [-22.5, 22.5]);
+
+    alice_photon.onShift = function(){setTimeout(alice_coin.flip, 300);};
+    bob_photon.onShift = function(){setTimeout(bob_coin.flip, 300);};
+
+    addImg("walls", "img/walls.png", 420, midpoint);
+
+    //rules = new Rules(45, 230, 100, 100, false);
+
+    alice_coin.onLand = function(outcome){
+        setTimeout(function(){
+            alice_waveplate.setAngle(alice_coin.outcome=="heads" ? 0 : 1); 
+            bob_waveplate.setAngle(bob_coin.outcome=="heads" ? 0 : 1); 
+            //rules.draw();
+        }, 300);
+    }
+
+    alice_photon.onFinish = function(){
+        setTimeout(function(){
+            var oracle_output = bellstate(alice_coin.outcome, bob_coin.outcome);
+            alice_detector.flagUp(oracle_output.alice);
+            bob_detector.flagUp(oracle_output.bob);
+        }, 300);
+    }
+
+    alice_detector.afterFlag = function(){
+        executeStrategy();
+    }
+
+    $("#content").click(function(){
+        if (locked){return;}
+        locked=true;
+        haveTurn();
+    });
+
+    $("#alice").click(function(){alice.say(1);});
+}
+</script>
+
+<div id="content" style="width:600px; height:300px;"> </div>
+<div style="position:absolute; right:5px;">
+    <a href="#" onclick="javascript:autoplay();">Autoplay</a>
+</div>
+<div id="winlose">
+    <div class="caption">Click anywhere in the figure to fire some photons</div>
+</div>
+
+</body>
+</html>

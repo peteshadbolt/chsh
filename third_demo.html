@@ -4,12 +4,13 @@
 <head>
 <meta charset="utf-8">
 <title>Third demo</title>
-<link rel="stylesheet" href="css.css">
+<link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
 
-<script src="main.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/new.js"></script>
 
 <script type="text/javascript">
     var opposite = {"circle":"triangle", "triangle":"circle"};
@@ -20,15 +21,15 @@
 
     function executeStrategy(){
         choice = Math.random()>0.5 ? "circle" : "triangle";
-        alice.say("circle");
-        bob.say("circle");
-        if (aliceCoin.outcome=="tails" && bobCoin.outcome=="tails")
+        rules.draw();
+        alice.say("circle", false);
+        bob.say("circle", false);
+        if (alice_coin.outcome=="tails" && bob_coin.outcome=="tails")
         { losses += 1; } else { wins += 1; }
 
-
         var percent = (100*wins/(wins+losses)).toFixed(0);
-        winlose.innerHTML = "Won " + wins + " games  / Lost " + losses + " games ("+ percent + "%)" ;
-
+        $("#winlose").html("Won " + wins + " games  / Lost " + losses + " games ("+ percent + "%)");
+        locked=false;
     }
 
     function autoplay(){
@@ -38,31 +39,35 @@
     }
 
     function haveTurn(){
-        alice.say(undefined);
-        bob.say(undefined);
-        aliceCoin.flip();
-        bobCoin.flip();
+        alice.reset();
+        bob.reset();
+        alice_coin.flip();
+        bob_coin.flip();
     }
 
     window.onload = function(){
-        boot();
+        var poff = 130;
+        alice = new Person("alice", "img/alice.png", poff, 70, -1);
+        bob = new Person("bob", "img/bob.png", 600-poff, 70, 1);
+        alice_coin = new Coin("alice_coin", 20, 100);
+        bob_coin = new Coin("bob_coin", 580, 100);
 
-        alice = new Person(images.alice, 150, 50, -1);
-        bob = new Person(images.bob, gc.width-160, 50, 1);
-        aliceCoin = new Coin(10, 100);
-        bobCoin = new Coin(gc.width-50, 100);
-        alice.afterSay = function(){locked=false;}
+        $("#content").click(function(){
+            if (locked){return;}
+            locked=true;
+            haveTurn();
+        });
 
-        rules = new Rules();
-        aliceCoin.onLand = function(){ setTimeout(executeStrategy, 150); }
-        gc.onclick = haveTurn;
-        setInterval(update, 15);
+        rules = new Rules(300, 75, 250, 150);
+
+        alice_coin.onLand = function(){
+            setTimeout(executeStrategy, 50);
+        }
     }
 
 </script>
 
-<canvas id=canvas width=600 height=150></canvas>
-
+<div id="content" style="width:600px; height:150px;"> </div>
 <div style="position:absolute; right:5px;">
     <a href="#" onclick="javascript:autoplay();">Autoplay</a>
 </div>

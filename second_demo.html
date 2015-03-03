@@ -4,60 +4,62 @@
 <head>
 <meta charset="utf-8">
 <title>Second demo</title>
-<link rel="stylesheet" href="css.css">
+<link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
 
-<script src="main.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/new.js"></script>
 
 <script type="text/javascript">
-    var opposite = {"circle":"triangle", "triangle":"circle"};
-    var winlose;
-    var wins = 0;
+var opposite = {"circle":"triangle", "triangle":"circle"};
+var wins = 0;
 
-    function executeStrategy(){
-        choice = Math.random()>0.5 ? "circle" : "triangle";
-        if (aliceCoin.outcome=="tails" && bobCoin.outcome=="tails"){
-            alice.say(choice);
-            bob.say(opposite[choice]);
-        }
-        else {
-            alice.say(choice);
-            bob.say(choice);
-        }
-        wins += 1;
-        winlose.innerHTML = "Won " + wins + " games  / Lost 0 games (100%)" ;
-
+function executeStrategy(){
+    choice = Math.random()>0.5 ? "circle" : "triangle";
+    rules.draw();
+    if (alice_coin.outcome=="tails" && bob_coin.outcome=="tails"){
+        alice.say(choice, false);
+        bob.say(opposite[choice], false);
     }
-
-    window.onload = function(){
-        boot();
-
-        alice = new Person(images.alice, 0, 50, 1);
-        bob = new Person(images.bob, gc.width, 50, -1);
-        aliceCoin = new Coin(100, 100);
-        bobCoin = new Coin(450, 100);
-
-        rules = new Rules();
-
-        aliceCoin.onLand = function(){
-            setTimeout(executeStrategy, 50);
-        }
-
-        gc.onclick = function(){
-            alice.say(undefined);
-            bob.say(undefined);
-            aliceCoin.flip();
-            bobCoin.flip();
-        }
-
-        setInterval(update, 15);
+    else {
+        alice.say(choice, false);
+        bob.say(choice, false);
     }
+    wins += 1;
+    $("#winlose").html("Won " + wins + " games  / Lost 0 games (100%)");
+    locked=false;
+}
 
+function haveTurn(){
+    alice.reset();
+    bob.reset();
+    alice_coin.flip();
+    bob_coin.flip();
+}
+
+window.onload = function(){
+    alice = new Person("alice", "img/alice.png", 50, 70, 1);
+    bob = new Person("bob", "img/bob.png", 550, 70, -1);
+    alice_coin = new Coin("alice_coin", 130, 100);
+    bob_coin = new Coin("bob_coin", 500-30, 100);
+
+    $("#content").click(function(){
+        if (locked){return;}
+        locked=true;
+        haveTurn();
+    });
+
+    rules = new Rules(300, 75, 250, 150);
+
+    alice_coin.onLand = function(){
+        setTimeout(executeStrategy, 50);
+    }
+}
 </script>
 
-<canvas id=canvas width=600 height=150></canvas>
+<div id="content" style="width:600px; height:150px;"> </div>
 <div id=winlose>
 <div class="caption">Click anywhere in the figure to play a turn.</div>
 </div>

@@ -56,7 +56,7 @@ function Photon(id, x, y, direction){
         var shift = person_y 
         var ymove = self.direction==1 ? "+="+person_y : "-="+person_y;
         var xmove = "+=50"
-        self.image.animate({ top: ymove, left: xmove}, 800, "linear", self.shift);
+        self.image.animate({ top: ymove, left: xmove}, 300, "linear", self.shift);
     } 
 
     self.shift=function(){
@@ -72,14 +72,15 @@ function Photon(id, x, y, direction){
     }
 }
 
-function WavePlate(id, x, y){
+function WavePlate(id, x, y, angles){
     var self=this;
     self.image = addImg(id, "img/waveplate.png", x, y);
     self.angle = 0;
+    self.angles = angles
     self.image.hide();
 
-    self.setAngle=function(angle){
-        self.target_angle = angle;
+    self.setAngle=function(whichAngle){
+        self.target_angle = self.angles[whichAngle];
         self.moveInterval = setInterval(self.move, 15);
     }
 

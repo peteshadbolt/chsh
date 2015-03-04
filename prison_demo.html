@@ -50,7 +50,7 @@ function executeStrategy(){
         }
     }
 
-    var percent = (100*wins/(wins+losses)).toFixed(0);
+    var percent = (100*wins/(wins+losses)).toFixed(2);
     $("#winlose").html("Won " + wins + " games  / Lost " + losses + " games ("+ percent + "%)");
 
     locked=false;
@@ -66,8 +66,9 @@ function haveTurn(){
 
 function autoplay(){
     haveTurn();
+    timescale = .2;
     clearInterval(autoplayer);
-    autoplayer = setInterval(haveTurn, 4000);
+    autoplayer = setInterval(haveTurn, 800);
 }
 
 
@@ -102,8 +103,8 @@ window.onload = function(){
     alice_waveplate = new WavePlate("alice_waveplate", waveplate_x, alice_beamline, [0, 45]);
     bob_waveplate = new WavePlate("bob_waveplate", waveplate_x, bob_beamline, [-22.5, 22.5]);
 
-    alice_photon.onShift = function(){setTimeout(alice_coin.flip, 300);};
-    bob_photon.onShift = function(){setTimeout(bob_coin.flip, 300);};
+    alice_photon.onShift = function(){setTimeout(alice_coin.flip, 300*timescale);};
+    bob_photon.onShift = function(){setTimeout(bob_coin.flip, 300*timescale);};
 
     addImg("walls", "img/walls.png", 420, midpoint);
 
@@ -114,7 +115,7 @@ window.onload = function(){
             alice_waveplate.setAngle(alice_coin.outcome=="heads" ? 0 : 1); 
             bob_waveplate.setAngle(bob_coin.outcome=="heads" ? 0 : 1); 
             //rules.draw();
-        }, 300);
+        }, 300*timescale);
     }
 
     alice_photon.onFinish = function(){
@@ -122,7 +123,7 @@ window.onload = function(){
             var oracle_output = bellstate(alice_coin.outcome, bob_coin.outcome);
             alice_detector.flagUp(oracle_output.alice);
             bob_detector.flagUp(oracle_output.bob);
-        }, 300);
+        }, 300*timescale);
     }
 
     alice_detector.afterFlag = function(){

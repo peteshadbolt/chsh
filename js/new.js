@@ -7,6 +7,8 @@ var alice_beamline, bob_beamline;
 var midpoint, person_y;
 var locked=false;
 
+var timescale = 1;
+
 function addImg(id, path, x, y, container){
     if (container==undefined){container=$("#content");}
     container.append("<img id='"+id+"' src='"+path+"'/>");
@@ -30,8 +32,8 @@ function Laser(x, y){
     self.laserbeam.hide();
 
     self.fire = function(){
-        self.laserbeam.fadeIn(100);
-        self.laserbeam.fadeOut(100, crystal.generate);
+        self.laserbeam.fadeIn(100*timescale);
+        self.laserbeam.fadeOut(100*timescale, crystal.generate);
     }
 }
 
@@ -56,12 +58,12 @@ function Photon(id, x, y, direction){
         var shift = person_y 
         var ymove = self.direction==1 ? "+="+person_y : "-="+person_y;
         var xmove = "+=50"
-        self.image.animate({ top: ymove, left: xmove}, 300, "linear", self.shift);
+        self.image.animate({ top: ymove, left: xmove}, 300*timescale, "linear", self.shift);
     } 
 
     self.shift=function(){
         if (self.onShift!=undefined){self.onShift();}
-        self.image.animate({ left: "+=200"}, 2000, "linear", self.finished);
+        self.image.animate({ left: "+=200"}, 2000*timescale, "linear", self.finished);
     }
 
     self.finished=function(){
@@ -112,13 +114,13 @@ function Detector(name, x, y){
 
     self.flagUp=function(whichflag){
         self.flag = whichflag;
-        self.flags[whichflag].fadeIn(200);
-        if (self.afterFlag){setTimeout(self.afterFlag, 500);}
+        self.flags[whichflag].fadeIn(200*timescale);
+        if (self.afterFlag){setTimeout(self.afterFlag, 500*timescale);}
     }
 
     self.reset = function(){
-        self.flags.circle.fadeOut(200);
-        self.flags.triangle.fadeOut(200);
+        self.flags.circle.fadeOut(200*timescale);
+        self.flags.triangle.fadeOut(200*timescale);
     }
 }
 
@@ -142,8 +144,8 @@ function Person(name, img, x, y, direction){
 
     self.say = function(saywhat, timeout){
         if (timeout==undefined){timeout=true;}
-        self.sayings[saywhat].fadeIn(200).delay(2000);
-        if (timeout){self.sayings[saywhat].fadeOut(200);}
+        self.sayings[saywhat].fadeIn(200*timescale).delay(2000*timescale);
+        if (timeout){self.sayings[saywhat].fadeOut(200*timescale);}
         if(self.afterSay){self.afterSay();}
     }
 }

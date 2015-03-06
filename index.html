@@ -30,7 +30,7 @@
         <li>If either Alice or Bob flip heads (<b>HH</b> or <b>HT</b> or <b>TH</b>),<br/> they should output the same symbol.  So, &#x25B2;  &#x25B2;  and  &#x25CF; &#x25CF; are winning moves.
         <li>If Alice and Bob both flip tails (<b>TT</b>), <br/>they should output different symbols. So, &#x25B2;  &#x25CF;  and &#x25CF; &#x25B2; are winning moves.
     </ul>
-   The aim of the game is for Alice and Bob to collaborate, so as to win as often as possible. We can summarize these rules with an occult symbol:
+   The aim of the game is for Alice and Bob to collaborate, so as to win as often as possible. We can summarize the rules with a symbol:
    </p>
 
     <iframe src="second_demo.html" width=600 height=190 scrolling="no" ></iframe>
@@ -39,33 +39,102 @@
     Alice and Bob are playing a perfect game. Since their coins are not hidden, they can easily negotiate a strategy such that they win 100% of the time. 
     The game is too easy.  Boring.
     </p>
+
     <p>
-    Let's make things more interesting and put Alice and Bob back-to-back. 
-    Now Alice can't see Bob's coin, and vice-versa. 
-    We'll let them meet up and agree on a strategy before each coin flip, 
-    but they are forbidden from communicating after the coins have flipped.
-    <ul>
-        <li>What is the best strategy?</li>
-        <li>How often can they win, on average? </li>
-    </ul>
+    Let's make things more interesting. We'll allow Alice and Bob to meet and discuss a strategy before the coin flip.
+    This strategy might be exchanged verbally, or written on a piece of paper, or stored in a computer or whatever &mdash; 
+    Alice and Bob can collect some arbitrary stuff from a meeting point, have a chat and a cup of tea, whatever they like.
+    However, once the coins have flipped, <i>they are forbidden from communicating </i>.
+    There is no way that Alice can learn the outcome of Bob's coin flip, and vice-versa.  No phone calls, no texting, no wifi. </p> 
+
+    <iframe src="back_to_back.html" width=600 height=130 scrolling="no" ></iframe>
+
+    <p>
+    Previously, Alice and Bob won 100% of the time. 
+    Now that they can't communicate the outcome of their coin flips,
+    what is the best possible strategy? How often can they win? 
+    I'll give you a clue: they can't win 100% of the time any more.
     </p>
+    <p>
+    It might help to think about some examples.
+    </p>
+    <ul>
+        <li>What if Alice and Bob independently output &#x25CF; or &#x25B2; at random? 
+        <li>What if each party outputs &#x25CF; when they flip <b>H</b> and &#x25B2; when they flip <b>T</b>?
+        <li>What if they write down a really complicated plan in advance?
+        <li>What if they each have a supercomputer, or a submarine, or a puppy?
+        <li>What if they simply always output &#x25CF;?
+    </ul>
 
     <iframe src="third_demo.html" width=600 height=190 scrolling="no" ></iframe>
 
     <p>
-    Alice and Bob are using a really simple strategy. They're just saying "&#x25CF;" every time. As a result, they're average score is exactly 75%. 
-    Is there a more complicated strategy which does better?  Nope &mdash; so long as Alice and Bob cannot communicate after the coin flip, 75% is provably the maximum possible success probability.
+    Alice and Bob are using a really simple strategy. They're just saying "&#x25CF;" every time. They win three games out of four on average. They only lose when they flip <b>TT</b>.
+    Is there a more complicated strategy which does better?  Nope &mdash; it can be proven that no classical strategy outperforms this simple method.
+    </p>
+
+    <p>
+    I suggest that you do not progress to the next section until you are convinced (intuitively, or by finding a proof) that 75% is a hard limit. 
+    You should be able to see that no matter what stuff Alice and Bob exchange during their meeting &mdash; computers, messages, whatever &mdash; nothing helps beat 75%.
     </p>
 
     <hr/>
 
     <p>
-    So, Alice and Bob meet up before each round. 
-    They can exchange any information they like at this point, but it doesn't seem to help beat 75%.
-    What if they share quantum resources?
+    In the figure below, the object on the left is a photon source. 
+    A laser zaps a crystal, generating two photons &mdash; tiny particles of light.
+    We give one photon to Alice, and the other to Bob.
+    <i>These photons are going to play the role of the pieces of paper or mental plans which Alice and Bob previously exchanged.</i>
+    We're not cheating. Just as before, Alice and Bob are allowed to collect some objects from a meeting place before they flip their coins.
+    </p>
+
+    <p>
+    Having collected their photons, Alice and Bob flip their coins.
+    Alice has some optical apparatus: a piece of glass and a photon detector.
+    She configures her device, twisting a piece of glass to the left if she flips <b>H</b>, or to the right if she flips <b>T</b>.
+    The photon goes through the optical apparatus, and into the detector.
+    The detector has two possible outputs. Alice has labelled them, "&#x25CF;" and "&#x25B2;".
+    She then simply shouts out the output of her detector.
+    </p>
+
+    <p>
+    At the same time, Bob follows the same procedure. He flips his coin, sets his apparatus, and dutifully chooses "&#x25CF;" or "&#x25B2;" depending on the output of his detector.
+    Let's play the game:
     </p>
 
     <iframe src="prison_demo.html" width=600 height=350 scrolling="no" ></iframe>
+
+    <p>
+    <b>THAT IS VERY WIERD.</b>  Now Alice and Bob win 85.36% of the time on average. What is going on? How is this possible!?
+    </p>
+
+    <p>
+    Maybe Alice and Bob are cheating, they're calling each other up on the phone? 
+    Well, let's make sure. We'll give them their photons, and then put them in sealed boxes, with a <a href="https://en.wikipedia.org/wiki/Faraday_cage">Faraday Cage</a> each, on different sides of the solar system.
+    Now there's no way they can communicate with each other.
+    What happens?  They still win with the same probability! This is bullshit!
+    </p>
+
+    <p>
+    This effect has been tested and independently confirmed in hundreds of experiments, performed by respected physicists across the world.
+    It's been implemented using photons, electrons, atoms, and even superconducting wires. 
+    In order to rule out cheating by classical communication, one group even placed Alice and Bob on different islands in Tenerife!
+    </p>
+
+    <p>
+    How is it that the game can be beaten with a couple of little photons, but not by humans with computers and JCBs and brains?
+    </p>
+
+    <p>
+    The short answer is that small things, quantum mechanical things like photons, electrons, and atoms <i>do not play according to common-sense rules</i>.
+    Quantum mechanics really is very alien, very far removed from our macroscopic classical experience.
+    This has real practical concequences. We've seen here a specific example where a quantum machine can outperform all possible classical machines &mdash; albeit in a rather contrived task.
+    However, we believe that we can exploit counterintuitive quantum effects to build really useful machines.
+    These include ultra-secure communication links, and ultra-fast quantum computers.
+    </p>
+    <p>
+    The long answer involves learning more quantum mechanics :)
+    </p>
 
 </div>
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Second demo</title>
+<link rel="stylesheet" href="css/css.css">
+</head>
+
+<body>
+
+<script src="js/jquery.js"></script>
+<script src="js/new.js"></script>
+
+<script type="text/javascript">
+var opposite = {"circle":"triangle", "triangle":"circle"};
+var wins = 0;
+
+function executeStrategy(){
+    choice="question";
+    alice.say(choice);
+    bob.say(choice);
+    locked=false;
+}
+
+function moveIn(){
+    alice.reset();
+    bob.reset();
+    alice.look(1);
+    bob.look(-1);
+    alice.image.animate({left: "+=100"}, 800, moveOut);
+    bob.image.animate({left: "-=100"}, 800);
+}
+
+function moveOut(){
+    alice.say("question");
+    bob.say("question");
+    setTimeout(function(){
+    alice.look(-1);
+    bob.look(1);
+    alice.image.animate({left: "-=100"}, 800, flipNow);
+    bob.image.animate({left: "+=100"}, 800);
+    }, 3000);
+}
+
+function flipNow(){
+    alice_coin.flip();
+    bob_coin.flip();
+}
+
+window.onload = function(){
+    alice = new Person("alice", "img/alice.png", 120, 50, -1);
+    bob = new Person("bob", "img/bob.png", 600-120, 50, 1);
+    alice_coin = new Coin("alice_coin", 30, 80);
+    bob_coin = new Coin("bob_coin", 600-30, 80);
+
+    $("#content").click(function(){
+        if (locked){return;}
+        locked=true;
+        moveIn();
+    });
+
+    alice_coin.onLand = function(){
+        setTimeout(executeStrategy, 50);
+    }
+}
+</script>
+
+<div id="content" style="width:600px; height:100px;"> </div>
+<div id=winlose>
+<div class="caption">Click anywhere in the figure to play a turn.</div>
+</div>
+
+</body>
+</html>

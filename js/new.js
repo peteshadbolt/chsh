@@ -106,8 +106,8 @@ function Detector(name, x, y){
     $("#content").append("<div id='"+name+"'></div>");
     self.container = $("#"+name);
     self.blackbox = addImg(name+"_blackbox", "img/blackbox.png", 0, 0, self.container);
-    self.flags = {"circle":addImg(name+"_circle", "img/flagguilty.png", 10, -30, self.container),
-                "triangle":addImg(name+"_triangle", "img/flaginnocent.png", 10, -30, self.container)};
+    self.flags = {"circle":addImg(name+"_circle", "img/flagcircle.png", 10, -30, self.container),
+                "triangle":addImg(name+"_triangle", "img/flagtriangle.png", 10, -30, self.container)};
     self.container.css({"position":"absolute", "left":x+"px", "top":y+"px"});
     self.flags.circle.hide();
     self.flags.triangle.hide();
@@ -126,28 +126,41 @@ function Detector(name, x, y){
 
 function Person(name, img, x, y, direction){
     var self=this;
+    self.x = x;
     self.image = addImg(name, img, x, y);
-    fliph(self.image, direction);
 
-    var which_guilty = direction > 0 ? "img/say_guilty.png" : "img/say_guilty2.png";
-    self.sayings = {"circle":addImg(name+"_say1", which_guilty, x+70*direction, y-10),
-                    "triangle":addImg(name+"_say2", "img/say_innocent.png", x+70*direction, y-10)};
-    fliph(self.sayings.circle, direction);
-    fliph(self.sayings.triangle, direction);
-    self.sayings.circle.hide();
-    self.sayings.triangle.hide();
+    //var which_guilty = direction > 0 ? "img/say_guilty.png" : "img/say_guilty2.png";
+    self.sayings = {"circle":addImg(name+"_say1", "img/say_circle.png", x, y-10),
+                    "triangle":addImg(name+"_say2", "img/say_triangle.png", x, y-10),
+                    "question":addImg(name+"_question", "img/say_question.png", x, y-10)};
+    for (var q in self.sayings){ self.sayings[q].hide(); }
+
+    self.look = function(direction){
+        self.direction = direction;
+
+        fliph(self.image, direction);
+    }
 
     self.reset = function(){
         self.sayings.circle.hide().clearQueue();
         self.sayings.triangle.hide().clearQueue();
+        self.sayings.question.hide().clearQueue();
     }
 
     self.say = function(saywhat, timeout){
         if (timeout==undefined){timeout=true;}
+
+        fliph(self.sayings[saywhat], self.direction);
+        var imgx = self.image.position().left+self.image.width()/2;
+        var newx = imgx+70*self.direction - self.sayings[saywhat].width()/2;
+        self.sayings[saywhat].css({"left":(newx)+"px"});
         self.sayings[saywhat].fadeIn(200*timescale).delay(2000*timescale);
+
         if (timeout){self.sayings[saywhat].fadeOut(200*timescale);}
         if(self.afterSay){self.afterSay();}
     }
+
+    self.look(direction);
 }
 
 function Coin(name, x, y){
